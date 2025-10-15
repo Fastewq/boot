@@ -173,7 +173,7 @@ export const UnifiedPositionGroup: React.FC<PositionGroupProps> = ({
 
   const totalIncome = incomeItems.reduce((sum, item) => sum + (item.totalAmount ?? item.price * item.quantity), 0)
   const totalExpense = expenseItems.reduce((sum, item) => sum + (item.totalAmount ?? item.price * item.quantity), 0)
-  const totalProfit = totalIncome + totalExpense
+  const totalProfit = totalIncome - totalExpense
   const itemCount = incomeItems.length + expenseItems.length
 
   return (
@@ -264,7 +264,7 @@ export const UnifiedWorkGroup: React.FC<WorkGroupProps> = ({
     return sum + pos.expenseItems.reduce((s, item) => s + (item.totalAmount ?? item.price * item.quantity), 0)
   }, 0)
 
-  const totalProfit = totalIncome + totalExpense
+  const totalProfit = totalIncome - totalExpense
   const itemCount = positions.reduce((sum, pos) => sum + pos.incomeItems.length + pos.expenseItems.length, 0)
 
   return (
