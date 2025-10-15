@@ -67,11 +67,16 @@ export const ViewUPD: React.FC = () => {
     }
   }
 
-  const calculateTotal = (items: AvailableReceptionItem[]): number => {
-    return items.reduce((sum, item) => {
-      const itemTotal = (item.quantity || 1) * (item.price || 0)
-      return item.transaction_type === 'Доходы' ? sum + itemTotal : sum - itemTotal
-    }, 0)
+  const calculateTotals = (items: AvailableReceptionItem[]) => {
+    const income = items
+      .filter(item => item.transaction_type === 'Доходы')
+      .reduce((sum, item) => sum + (item.quantity || 1) * (item.price || 0), 0)
+
+    const expense = items
+      .filter(item => item.transaction_type === 'Расходы')
+      .reduce((sum, item) => sum + (item.quantity || 1) * (item.price || 0), 0)
+
+    return { income, expense, total: income - expense }
   }
 
   if (loading) {
@@ -100,7 +105,7 @@ export const ViewUPD: React.FC = () => {
     )
   }
 
-  const totalAmount = calculateTotal(items)
+  const { income: totalIncome, expense: totalExpense, total: totalAmount } = calculateTotals(items)
 
   return (
     <AppLayout
@@ -184,13 +189,13 @@ export const ViewUPD: React.FC = () => {
                   <div className="flex justify-between items-center">
                     <span className="text-xs text-gray-600">Доходы:</span>
                     <span className="text-sm font-semibold text-green-600">
-                      {formatCurrency(updDocument.total_income || 0)}
+                      {formatCurrency(totalIncome)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-xs text-gray-600">Расходы:</span>
                     <span className="text-sm font-semibold text-red-600">
-                      {formatCurrency(updDocument.total_expense || 0)}
+                      {formatCurrency(totalExpense)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center pt-1.5 border-t border-gray-200">

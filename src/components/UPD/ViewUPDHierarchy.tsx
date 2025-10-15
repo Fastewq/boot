@@ -36,7 +36,7 @@ const PositionItem: React.FC<PositionItemProps> = ({ item }) => {
       </div>
       <div className="mt-0.5 flex items-center gap-2">
         <span className={`text-xs font-medium ${isIncome ? 'text-green-700' : 'text-red-700'}`}>
-          {isIncome ? '+' : '--'} {total.toLocaleString('ru-RU')} ₽
+          {isIncome ? '+' : '-'} {total.toLocaleString('ru-RU')} ₽
         </span>
         <span className="text-xs text-gray-400">•</span>
         <span className="text-xs text-gray-500">
@@ -75,7 +75,7 @@ const TransactionGroup: React.FC<TransactionGroupProps> = ({ type, items }) => {
           <h4 className={`text-xs font-medium ${textColor}`}>{type}</h4>
         </div>
         <span className={`text-xs font-semibold ${textColor}`}>
-          {isIncome ? '+' : '--'} {Math.abs(total).toLocaleString('ru-RU')} ₽
+          {isIncome ? '+' : '-'} {Math.abs(total).toLocaleString('ru-RU')} ₽
         </span>
       </div>
 
@@ -239,9 +239,13 @@ const MotorGroup: React.FC<MotorGroupProps> = ({
             <h2 className="text-xs font-semibold text-gray-900 truncate">
               {motorDescription}
             </h2>
-            <p className="text-xs text-gray-600 truncate">
-              Инв. №: {inventoryNumber || 'Не указан'} | {subdivisionName}
-            </p>
+            {(inventoryNumber || subdivisionName) && (
+              <p className="text-xs text-gray-600 truncate">
+                {inventoryNumber && `Инв. №: ${inventoryNumber}`}
+                {inventoryNumber && subdivisionName && ' | '}
+                {subdivisionName}
+              </p>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0 ml-2">
